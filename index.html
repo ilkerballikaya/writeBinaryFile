@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Upload</title>
+  </head>
+  <body>
+    <h1>Image Upload</h1>
+    <!-- <button onclick="sendBase64()">Send base64</button> -->
+    <form action="http://localhost:3000/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" onchange="loadFile(event)" />
+      <input type="submit" value="Upload" />
+    </form>
+    <img id="output" />
+    <script>
+      var loadFile = function (event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var output = document.getElementById('output');
+          output.src = reader.result;
+          sendBase64(reader.result)
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      };
+
+      function sendBase64(base64) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/sendBase64', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        let val = 'base64='+base64
+        xhr.send(val);
+      }
+    </script>
+  </body>
+</html>
